@@ -17,7 +17,8 @@ function App() {
         <Route path="/" element={<Header />}>
           <Route path="/" element={<Home />} />
           <Route path="/library" element={<Library />} />
-          <Route path="/Pokemondata" element={<Pokemondata />} />
+          <Route path="/pokemondata/:id" element={<Pokemondata />} />
+       
           <Route path="*" element={<Nopage />} />
         </Route>
       </Routes>

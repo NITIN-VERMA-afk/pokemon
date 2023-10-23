@@ -1,13 +1,22 @@
 import { useState, useEffect } from "react";
 import httpcommon from "../API/http-common";
 
+import {  useParams } from "react-router-dom";
+
+
 const Pokemondata = () => {
-  const [newData, setNewData] = useState(null);
+
+  const [newData, setNewData] = useState("");
+  const {id}=useParams();
+  const abilities=newData.abilities?newData.abilities.map((ability)=>ability.ability.name):[];
+  const move =newData.moves?newData.moves.map((item)=>item.move.name):[]
+  const srMove = move.slice(0, 5);
+ 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await httpcommon.get("/ditto");
+        const response = await httpcommon.get(`/${id}`);
         setNewData(response.data);
         console.log(newData);
       } catch (error) {
@@ -16,7 +25,7 @@ const Pokemondata = () => {
     };
 
     fetchData();
-  }, []);
+  }, [id]);
 
   if (!newData) {
     return <div>Loading...</div>;
@@ -36,18 +45,22 @@ const Pokemondata = () => {
             <h3 className="text-gray-700 text-lg font-semibold">
               General Info
             </h3>
-            <p className="text-gray-700 text-base">Type: {}</p>
-            <p className="text-gray-700 text-base">Height: {newData.height}</p>
-            <p className="text-gray-700 text-base">Weight: {newData.weight}</p>
-            <p className="text-gray-700 text-base">order: {newData.order}</p>
-            <p className="text-gray-700 text-base">Ability: {}</p>
-            <p className="text-gray-700 text-base">Base Experience: {}</p>
-            <p className="text-gray-700 text-base">Habitat: {}</p>
-            <p className="text-gray-700 text-base">Weaknesses: {}</p>
-            <p className="text-gray-700 text-base">Evolves from: {}</p>
-            <p className="text-gray-700 text-base">Egg Group: {}</p>
-            <p className="text-gray-700 text-base">Color: {}</p>
-            <p className="text-gray-700 text-base">Catch Rate: {}</p>
+            <p className=" text-base">Type: {}</p>
+            <p className=" text-base">Height: {newData.height}</p>
+            <p className=" text-base">Weight: {newData.weight}</p>
+            <p className=" text-base">order: {newData.order}</p>
+            <p className=" text-base">Ability: {abilities}</p>
+            <p className=" text-base">move: {move}</p>
+            <p className=" text-base">srMove: {srMove}</p>
+            <p className=" text-base">rarity: {newData.rarity}</p>
+
+            <p className=" text-base">Base Experience: {newData.base_experience}</p>
+            <p className="text-base">Habitat: {}</p>
+            <p className=" text-base">Weaknesses: {}</p>
+            <p className=" text-base">Evolves from: {}</p>
+            <p className=" text-base">Egg Group: {}</p>
+            <p className=" text-base">Color: {}</p>
+            <p className="text-base">Catch Rate: {}</p>
           </div>
 
           <div className="mb-4">

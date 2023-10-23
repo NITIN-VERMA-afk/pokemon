@@ -1,23 +1,32 @@
 import { useState, useEffect } from "react";
 import httpcommon from "../API/http-common";
 
-import {  useParams } from "react-router-dom";
-
+import { useParams } from "react-router-dom";
 
 const Pokemondata = () => {
-
   const [newData, setNewData] = useState("");
-  const {id}=useParams();
-  const abilities=newData.abilities?newData.abilities.map((ability)=>ability.ability.name):[];
-  const move =newData.moves?newData.moves.map((item)=>item.move.name):[]
-  const srMove = move.slice(0, 5);
- 
+  const [pokedata, setpokedata] = useState([]);
+  const { id } = useParams();
+  console.log(pokedata);
+
+  const abilities = newData.abilities
+    ? newData.abilities.map((ability) => ability.ability.name)
+    : [];
+
+  const skill = abilities.join(", ");
+  const base_stat = newData.stats
+    ? newData.stats.map((item) => item.base_stat)
+    : [];
+  const stat_name = newData.stats
+    ? newData.stats.map((item) => item.stat.name)
+    : [];
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await httpcommon.get(`/${id}`);
         setNewData(response.data);
+        setpokedata(newData);
         console.log(newData);
       } catch (error) {
         console.log("Something went wrong", error);
@@ -28,53 +37,85 @@ const Pokemondata = () => {
   }, [id]);
 
   if (!newData) {
-    return <div>Loading...</div>;
+    return (
+      <>
+        <button
+          disabled
+          type="button"
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 inline-flex items-center"
+        >
+          <svg
+            aria-hidden="true"
+            role="status"
+            className="inline w-4 h-4 mr-3 text-white animate-spin"
+            viewBox="0 0 100 101"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+              fill="#E5E7EB"
+            />
+            <path
+              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+              fill="currentColor"
+            />
+          </svg>
+          Loading...
+        </button>
+      </>
+    );
   }
 
   return (
     <>
-      <div className="m-12 bg-lime-300 rounded overflow-hidden shadow-lg flex justify-center items-center">
-        <img
-          src={`https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world/${newData.id}.svg`}
-          alt="Pokémon"
-        />
-        <div className="px-6 py-4">
-          <div className="font-bold text-xl mb-2">{newData.name}</div>
+      <div className="flex justify-center align-center mt-40">
+        <a
+          href="/"
+          className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+        >
+          <img
+            className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"
+            src={`https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world/${newData.id}.svg`}
+            alt="pokemonimg"
+          />
+          <div className="flex flex-col justify-between p-4 leading-normal">
+            <h2 className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+              pokemon no.:{newData.id}
+            </h2>
+            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+              {newData.name}
+            </h5>
+            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+              ABILITIES:{abilities}
+            </p>
 
-          <div className="mb-4">
-            <h3 className="text-gray-700 text-lg font-semibold">
-              General Info
-            </h3>
-            <p className=" text-base">Type: {}</p>
-            <p className=" text-base">Height: {newData.height}</p>
-            <p className=" text-base">Weight: {newData.weight}</p>
-            <p className=" text-base">order: {newData.order}</p>
-            <p className=" text-base">Ability: {abilities}</p>
-            <p className=" text-base">move: {move}</p>
-            <p className=" text-base">srMove: {srMove}</p>
-            <p className=" text-base">rarity: {newData.rarity}</p>
+            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+              HEIGHT:{newData.height}
+            </p>
+            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+              WEIGHT:{newData.weight}
+            </p>
+            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+              ORDER:{newData.order}
+            </p>
 
-            <p className=" text-base">Base Experience: {newData.base_experience}</p>
-            <p className="text-base">Habitat: {}</p>
-            <p className=" text-base">Weaknesses: {}</p>
-            <p className=" text-base">Evolves from: {}</p>
-            <p className=" text-base">Egg Group: {}</p>
-            <p className=" text-base">Color: {}</p>
-            <p className="text-base">Catch Rate: {}</p>
+            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400 gap-3">
+              skill:{skill}
+            </p>
+
+            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400 gap-3">
+              BASESTAT:{base_stat}
+            </p>
+            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400 gap-3">
+              STATUS NAME:{stat_name}
+            </p>
+            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400 gap-3">
+              STATUS NAME:{stat_name}
+            </p>
+            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400 gap-3"></p>
           </div>
-
-          <div className="mb-4">
-            <h3 className="text-gray-700 text-lg font-semibold">Base Stats</h3>
-            <ul className="list-disc pl-6">
-              <li>HP: {}</li>
-              <li>Attack: {}</li>
-              <li>Defense: {}</li>
-              <li>Special Attack: {}</li>
-              <li>Special Defense: {}</li>
-              <li>Speed: {}</li>
-            </ul>
-          </div>
-        </div>
+        </a>
       </div>
     </>
   );

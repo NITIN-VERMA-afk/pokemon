@@ -51,15 +51,16 @@ const Home = () => {
         information about your favorite Pokémon here.
       </p>
 
-      <div className="flex  flex-col justify-center items-center mt-4">
+      <div className="flex  flex-col justify-center items-center mt-4 h-screen">
         <form action="post">
           <label className="text-white text-3xl" htmlFor="first_name">
             Enter your fav pokemon name:
           </label>
+          <div className="flex justify-center items-center gap-2">
           <input
             type="text"
             id="first_name"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mt-3"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mt-2"
             placeholder="pokemon"
             onChange={(event) => {
               setPokemonName(event.target.value);
@@ -68,13 +69,16 @@ const Home = () => {
           />
           <button
             type="button"
-            className="text-white bg-blue-500 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 mt-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+            className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mt-3 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 "
             onClick={searchPokemon}
           >
             search
           </button>
+
+          </div>
+         
         </form>
-        <div className="m-24">
+        <div className="m-4">
           {!pokemonChosen ? (
             <h1 className="text-white text-3xl">plz chose a pokemon</h1>
           ) : (

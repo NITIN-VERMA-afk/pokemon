@@ -87,7 +87,7 @@ const Library = () => {
           ))}
         </>
       )}
-      <div className="flex justify-center items-center mx-96">
+      <div className="flex justify-center items-center  w-screen">
         {prevUrl && (
           <button
             onClick={() => {

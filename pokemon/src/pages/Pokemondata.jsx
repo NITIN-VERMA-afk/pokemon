@@ -34,7 +34,7 @@ const Pokemondata = () => {
     };
 
     fetchData();
-  }, [id]);
+  }, );
 
   if (!newData) {
     return (
@@ -69,7 +69,7 @@ const Pokemondata = () => {
 
   return (
     <>
-      <div className="flex justify-center align-center mt-40">
+      <div className="flex justify-center align-center mt-40 ">
         <a
           href="/"
           className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
@@ -110,9 +110,7 @@ const Pokemondata = () => {
             <p className="mb-3 font-normal text-gray-700 dark:text-gray-400 gap-3">
               STATUS NAME:{stat_name}
             </p>
-            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400 gap-3">
-              STATUS NAME:{stat_name}
-            </p>
+            
             <p className="mb-3 font-normal text-gray-700 dark:text-gray-400 gap-3"></p>
           </div>
         </a>

@@ -3,6 +3,7 @@ import { useState } from "react";
 import Card from "../components/Card";
 import httpcommon from "../API/http-common";
 
+
 const Home = () => {
   const [pokemonName, setPokemonName] = useState("");
   const [pokemonChosen, setPokemonChosen] = useState(false);
@@ -46,9 +47,7 @@ const Home = () => {
   return (
     <div className="bg-purple-400">
       <p className="text-3xl text-center bg-violet-500 text-white">
-        If youre interested in Pokémon, then Pokepedia is the ideal place for
-        you to learn more about your favorite Pokémon. You can search for
-        information about your favorite Pokémon here.
+      If you're interested in Pokémon, then Pokepedia is the ideal place for you to learn more about your favorite Pokémon. You can search for information about your favorite Pokémon here.
       </p>
 
       <div className="flex  flex-col justify-center items-center mt-4 h-screen">
@@ -104,3 +103,4 @@ const Home = () => {
 };
 
 export default Home;
+

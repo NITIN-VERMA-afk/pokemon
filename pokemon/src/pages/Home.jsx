@@ -5,7 +5,7 @@ import httpcommon from "../API/http-common";
 
 
 const Home = () => {
-  const [pokemonName, setPokemonName] = useState("");
+  const [pokemonName, setPokemonName] = useState("pikachu");
   const [pokemonChosen, setPokemonChosen] = useState(false);
   const [pokemon, setPokemon] = useState({
     name: "",
@@ -46,13 +46,13 @@ const Home = () => {
 
   return (
     <div className="bg-purple-400">
-      <p className="text-3xl text-center bg-violet-500 text-white">
+      <p className="text-sm text-center bg-violet-500 text-white">
       If you're interested in Pokémon, then Pokepedia is the ideal place for you to learn more about your favorite Pokémon. You can search for information about your favorite Pokémon here.
       </p>
 
-      <div className="flex  flex-col justify-center items-center mt-4 h-screen">
+      <div className="flex  flex-col justify-center items-center  h-screen">
         <form action="post">
-          <label className="text-white text-3xl" htmlFor="first_name">
+          <label className="text-white text-center text-xl" htmlFor="first_name">
             Enter your fav pokemon name:
           </label>
           <div className="flex justify-center items-center gap-2">

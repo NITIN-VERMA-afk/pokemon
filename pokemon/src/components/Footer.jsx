@@ -20,10 +20,10 @@ const Footer = () => {
                 <a href="/" className="block text-indigo-200 hover:text-white transition-colors duration-200">
                   Home
                 </a>
-                <a href="/library" className="block text-indigo-200 hover:text-white transition-colors duration-200">
+                <a href="/" className="block text-indigo-200 hover:text-white transition-colors duration-200">
                   Library
                 </a>
-                <a href="/about" className="block text-indigo-200 hover:text-white transition-colors duration-200">
+                <a href="/" className="block text-indigo-200 hover:text-white transition-colors duration-200">
                   About
                 </a>
               </div>
@@ -34,7 +34,7 @@ const Footer = () => {
               <h4 className="text-lg font-semibold text-white mb-3">Connect</h4>
               <div className="flex justify-center md:justify-end space-x-4">
                 <a 
-                  href="#" 
+                  href="/" 
                   className="text-indigo-200 hover:text-white transition-colors duration-200"
                   aria-label="GitHub"
                 >
@@ -43,7 +43,7 @@ const Footer = () => {
                   </svg>
                 </a>
                 <a 
-                  href="#" 
+                  href="/" 
                   className="text-indigo-200 hover:text-white transition-colors duration-200"
                   aria-label="Twitter"
                 >
@@ -62,10 +62,10 @@ const Footer = () => {
                 &copy; 2025 Pokepedia. All rights reserved.
               </p>
               <div className="flex space-x-6">
-                <a href="/privacy" className="text-indigo-200 hover:text-white text-sm transition-colors duration-200">
+                <a href="/" className="text-indigo-200 hover:text-white text-sm transition-colors duration-200">
                   Privacy Policy
                 </a>
-                <a href="/terms" className="text-indigo-200 hover:text-white text-sm transition-colors duration-200">
+                <a href="/" className="text-indigo-200 hover:text-white text-sm transition-colors duration-200">
                   Terms of Service
                 </a>
               </div>

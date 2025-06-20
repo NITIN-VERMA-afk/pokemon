@@ -46,7 +46,6 @@ const PokemonData = () => {
     navigate(`/pokemondata/${currentId + 1}`);
   };
 
-  // Loading state
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">

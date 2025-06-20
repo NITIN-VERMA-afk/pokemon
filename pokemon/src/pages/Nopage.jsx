@@ -32,9 +32,9 @@ const NoPage = () => {
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
-      {/* Animated Background Elements */}
+     
       <div className="absolute inset-0">
-        {/* Floating Orbs */}
+       
         <div 
           className="absolute w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse"
           style={{
@@ -63,9 +63,9 @@ const NoPage = () => {
         />
       </div>
 
-      {/* Main Content */}
+   
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 text-center">
-        {/* 404 Number */}
+       
         <div className="mb-8 relative">
           <h1 
             className={`text-8xl md:text-9xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 select-none transition-all duration-500 ${
@@ -79,14 +79,14 @@ const NoPage = () => {
             404
           </h1>
           
-          {/* Glitch Effect Overlay */}
+         
           <div className="absolute inset-0 text-8xl md:text-9xl font-bold text-red-500 opacity-0 hover:opacity-20 transition-opacity duration-200 select-none animate-pulse"
                style={{ clipPath: 'polygon(0 0, 100% 0, 100% 45%, 0 45%)' }}>
             404
           </div>
         </div>
 
-        {/* Error Message */}
+       
         <div className="mb-8 max-w-2xl">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 animate-fade-in">
             Oops! Page Not Found

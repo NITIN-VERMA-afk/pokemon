@@ -1,122 +1,266 @@
 import { useState, useEffect } from "react";
-import httpcommon from "../API/http-common";
+import { useParams, useNavigate } from "react-router-dom";
 
-import { useParams } from "react-router-dom";
-
-const Pokemondata = () => {
-  const [newData, setNewData] = useState("");
-  const [pokedata, setpokedata] = useState([]);
+const PokemonData = () => {
+  const [pokemonData, setPokemonData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const { id } = useParams();
-  console.log(pokedata);
-
-  const abilities = newData.abilities
-    ? newData.abilities.map((ability) => ability.ability.name)
-    : [];
-
-  const skill = abilities.join(", ");
-  const base_stat = newData.stats
-    ? newData.stats.map((item) => item.base_stat)
-    : [];
-  const stat_name = newData.stats
-    ? newData.stats.map((item) => item.stat.name)
-    : [];
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchPokemonData = async () => {
+      if (!id) return;
+
+      setLoading(true);
+      setError(null);
+
       try {
-        const response = await httpcommon.get(`/${id}`);
-        setNewData(response.data);
-        setpokedata(newData);
-        console.log(newData);
-      } catch (error) {
-        console.log("Something went wrong", error);
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch Pokemon data: ${response.status}`);
+        }
+        const data = await response.json();
+
+        setPokemonData(data);
+      } catch (err) {
+        console.error("Error fetching Pokemon data:", err);
+        setError(err.message || "Failed to load Pokemon data");
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchData();
-  }, );
+    fetchPokemonData();
+  }, [id]);
 
-  if (!newData) {
+  const handlePrevious = () => {
+    const currentId = parseInt(id);
+    if (currentId > 1) {
+      navigate(`/pokemondata/${currentId - 1}`);
+    }
+  };
+
+  const handleNext = () => {
+    const currentId = parseInt(id);
+    navigate(`/pokemondata/${currentId + 1}`);
+  };
+
+  // Loading state
+  if (loading) {
     return (
-      <>
-        <button
-          disabled
-          type="button"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 inline-flex items-center"
-        >
-          <svg
-            aria-hidden="true"
-            role="status"
-            className="inline w-4 h-4 mr-3 text-white animate-spin"
-            viewBox="0 0 100 101"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-              fill="#E5E7EB"
-            />
-            <path
-              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-              fill="currentColor"
-            />
-          </svg>
-          Loading...
-        </button>
-      </>
+      <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="relative">
+            <div className="w-16 h-16 border-4 border-blue-200 rounded-full animate-spin border-t-blue-600"></div>
+          </div>
+          <p className="text-lg font-medium text-gray-700">
+            Loading Pokemon data...
+          </p>
+        </div>
+      </div>
     );
   }
 
-  return (
-    <>
-      <div className="flex justify-center align-center mt-40 ">
-        <a
-          href="/"
-          className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
-        >
-          <img
-            className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"
-            src={`https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world/${newData.id}.svg`}
-            alt="pokemonimg"
-          />
-          <div className="flex flex-col justify-between p-4 leading-normal">
-            <h2 className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-              pokemon no.:{newData.id}
+  // Error state
+  if (error) {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-red-50 to-pink-100">
+        <div className="bg-white rounded-lg shadow-lg p-8 max-w-md mx-4">
+          <div className="flex items-center space-x-3 mb-4">
+            <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+              <span className="text-red-600 font-bold">!</span>
+            </div>
+            <h2 className="text-xl font-semibold text-gray-800">
+              Error Loading Pokemon
             </h2>
-            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-              {newData.name}
-            </h5>
-            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-              ABILITIES:{abilities}
-            </p>
-
-            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-              HEIGHT:{newData.height}
-            </p>
-            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-              WEIGHT:{newData.weight}
-            </p>
-            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-              ORDER:{newData.order}
-            </p>
-
-            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400 gap-3">
-              skill:{skill}
-            </p>
-
-            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400 gap-3">
-              BASESTAT:{base_stat}
-            </p>
-            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400 gap-3">
-              STATUS NAME:{stat_name}
-            </p>
-            
-            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400 gap-3"></p>
           </div>
-        </a>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
+          >
+            Try Again
+          </button>
+        </div>
       </div>
-    </>
+    );
+  }
+
+  if (!pokemonData) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <p className="text-lg text-gray-600">No Pokemon data found</p>
+      </div>
+    );
+  }
+
+  const abilities =
+    pokemonData.abilities?.map((ability) => ability.ability.name) || [];
+  const stats = pokemonData.stats || [];
+  const types = pokemonData.types?.map((type) => type.type.name) || [];
+
+  const formatStatName = (statName) => {
+    return statName.replace("-", " ").replace(/\b\w/g, (l) => l.toUpperCase());
+  };
+
+  const getTypeColor = (type) => {
+    const typeColors = {
+      normal: "bg-gray-400",
+      fire: "bg-red-500",
+      water: "bg-blue-500",
+      electric: "bg-yellow-400",
+      grass: "bg-green-500",
+      ice: "bg-blue-200",
+      fighting: "bg-red-700",
+      poison: "bg-purple-500",
+      ground: "bg-yellow-600",
+      flying: "bg-indigo-400",
+      psychic: "bg-pink-500",
+      bug: "bg-green-400",
+      rock: "bg-yellow-800",
+      ghost: "bg-purple-700",
+      dragon: "bg-indigo-700",
+      dark: "bg-gray-800",
+      steel: "bg-gray-500",
+      fairy: "bg-pink-300",
+    };
+    return typeColors[type] || "bg-gray-400";
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-8 px-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-gray-800 mb-2">
+            {pokemonData.name?.charAt(0).toUpperCase() +
+              pokemonData.name?.slice(1)}
+          </h1>
+          <p className="text-lg text-gray-600">Pokemon #{pokemonData.id}</p>
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+          <div className="md:flex">
+            <div className="md:w-1/2 bg-gradient-to-br from-blue-100 to-purple-100 p-8 flex items-center justify-center">
+              <div className="relative">
+                <img
+                  className="w-64 h-64 md:w-80 md:h-80 object-contain drop-shadow-lg"
+                  src={`https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world/${pokemonData.id}.svg`}
+                  alt={`${pokemonData.name} sprite`}
+                  onError={(e) => {
+                    e.target.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonData.id}.png`;
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="md:w-1/2 p-8">
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-3">
+                  Types
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {types.map((type, index) => (
+                    <span
+                      key={index}
+                      className={`px-3 py-1 rounded-full text-white text-sm font-medium ${getTypeColor(
+                        type
+                      )}`}
+                    >
+                      {type.charAt(0).toUpperCase() + type.slice(1)}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h4 className="text-sm font-medium text-gray-600 mb-1">
+                    Height
+                  </h4>
+                  <p className="text-xl font-semibold text-gray-800">
+                    {pokemonData.height / 10} m
+                  </p>
+                </div>
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h4 className="text-sm font-medium text-gray-600 mb-1">
+                    Weight
+                  </h4>
+                  <p className="text-xl font-semibold text-gray-800">
+                    {pokemonData.weight / 10} kg
+                  </p>
+                </div>
+              </div>
+
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-3">
+                  Abilities
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {abilities.map((ability, index) => (
+                    <span
+                      key={index}
+                      className="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-lg text-sm font-medium"
+                    >
+                      {ability.charAt(0).toUpperCase() +
+                        ability.slice(1).replace("-", " ")}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-200 p-8">
+            <h3 className="text-2xl font-semibold text-gray-800 mb-6">
+              Base Stats
+            </h3>
+            <div className="grid md:grid-cols-2 gap-4">
+              {stats.map((stat, index) => (
+                <div key={index} className="bg-gray-50 rounded-lg p-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm font-medium text-gray-600">
+                      {formatStatName(stat.stat.name)}
+                    </span>
+                    <span className="text-lg font-bold text-gray-800">
+                      {stat.base_stat}
+                    </span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-300"
+                      style={{
+                        width: `${Math.min(
+                          (stat.base_stat / 200) * 100,
+                          100
+                        )}%`,
+                      }}
+                    ></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex justify-center gap-4 mt-8">
+          <button
+            onClick={handlePrevious}
+            disabled={parseInt(id) <= 1}
+            className="bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl disabled:cursor-not-allowed"
+          >
+            ← Previous
+          </button>
+          <button
+            onClick={handleNext}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
+          >
+            Next →
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 
-export default Pokemondata;
+export default PokemonData;
